@@ -37,7 +37,7 @@ MATH_POSITIONS = {
 
 OPERATORS = {
     "clear": {"col": 0, "row": 2, "text": "AC", "image_path": None},
-    "invert": {"col": 1, "row": 2, "text": "", "image_path": None},
+    "invert": {"col": 1, "row": 2, "text": "I", "image_path": None},
     "percent": {"col": 2, "row": 2, "text": "%", "image_path": None}
 }
 

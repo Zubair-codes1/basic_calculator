@@ -1,4 +1,5 @@
 import customtkinter as ctk
+from Buttons import *
 from settings import *
 try:
     from ctypes import windll, byref, sizeof, c_int
@@ -23,8 +24,17 @@ class App(ctk.CTk):
         Input(self)
         Output(self)
 
+        # Clear
+        clear = Buttons.clear
+        Buttons(
+            self, OPERATORS["clear"]["text"], COLORS["dark_gray"]["fg"][1], WHITE, (FONT, NORMAL_FONT_SIZE),
+            COLORS["dark_gray"]["hover"][1], OPERATORS["clear"]["col"], OPERATORS["clear"]["row"], clear,
+            output_variable
+        )
+
         # run
         self.mainloop()
+
     def title_bar_color(self):
         try:
             HWND = windll.user32.GetParent(self.winfo_id())
@@ -33,6 +43,7 @@ class App(ctk.CTk):
             windll.dwmapi.DwmSetWindowAttribute(HWND, DWMWA_ATTRIBUTE, byref(c_int(COLOR)), sizeof(c_int))
         except:
             pass
+
 
 class Input(ctk.CTkFrame):
     def __init__(self, parent):
@@ -45,20 +56,17 @@ class Input(ctk.CTkFrame):
         input_label.pack()
         self.grid(row=0, rowspan=1, column=0, columnspan=4, sticky="e")
 
+
 class Output(ctk.CTkFrame):
     def __init__(self, parent):
         super().__init__(master=parent)
+        global output_variable
         output_variable = ctk.StringVar(value="")
         output_label = ctk.CTkLabel(
             master=self, font=(FONT, OUTPUT_FONT_SIZE), text=output_variable.get(), fg_color=BLACK, text_color=WHITE
         )
         output_label.pack()
         self.grid(row=1, rowspan=1, column=0, columnspan=4, sticky="e")
-
-class Button(ctk.CTkFrame):
-    def __init__(self, parent):
-        super().__init__(master=parent)
-
 
 if __name__ == "__main__":
     App()
