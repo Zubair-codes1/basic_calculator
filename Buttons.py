@@ -1,19 +1,22 @@
 import customtkinter as ctk
 from settings import *
 
-class Buttons(ctk.CTkButton):
-    def __init__(self, parent, text, fg_colour, text_color, font, hover_color, col, row, command, output=None,
-                 input_data=None):
-        super().__init__(
-            master=parent, text=text, fg_color=fg_colour, text_color=text_color, font=font,
-            hover_color=hover_color, command=command
-        )
-        self.output = output
-        self.input_data = input_data
-        self.grid(row=row, column=col, sticky="NSEW")
-    def clear(self):
-        self.output.set("")
-    def invert(self):
-        self.output.set(f"{self.output.get() * -1}")
-    def modulus(self):
-        self.input_data.set(self.input_data.get() + "%")
+class Numbers(ctk.CTkFrame):
+    def __init__(self, parent):
+        super().__init__(master=parent, fg_color=WHITE)
+        self.grid(row=4, rowspan=4, column=0, columnspan=3)
+        self.rowconfigure((0, 1, 2, 3), weight=1, uniform="a")
+        self.columnconfigure((0, 1, 2), weight=1, uniform="a")
+
+        self.make_buttons()
+
+    def make_buttons(self):
+        number = ctk.StringVar(value="1")
+        for i in range(1, 10):
+            button = ctk.CTkButton(
+                self, fg_color=COLORS["light-gray"]["fg"][1], textvariable=number.get(), text_color=BLACK,
+                hover_color=COLORS["light-gray"]["hover"][0]
+            )
+            button.pack()
+            number.set(int(number.get()) + 1)
+

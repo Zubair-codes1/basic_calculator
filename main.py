@@ -24,13 +24,8 @@ class App(ctk.CTk):
         Input(self)
         Output(self)
 
-        # Clear
-        clear = Buttons.clear
-        Buttons(
-            self, OPERATORS["clear"]["text"], COLORS["dark_gray"]["fg"][1], WHITE, (FONT, NORMAL_FONT_SIZE),
-            COLORS["dark_gray"]["hover"][1], OPERATORS["clear"]["col"], OPERATORS["clear"]["row"], clear,
-            output_variable
-        )
+        # buttons
+        Numbers(self)
 
         # run
         self.mainloop()
