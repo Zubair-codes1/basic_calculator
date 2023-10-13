@@ -18,5 +18,4 @@ class Numbers(ctk.CTkFrame):
                 hover_color=COLORS["light-gray"]["hover"][0]
             )
             button.pack()
-            number.set(int(number.get()) + 1)
 
