@@ -25,10 +25,46 @@ class App(ctk.CTk):
         Output(self)
 
         # buttons
-        Numbers(self)
+        Button(
+            parent=self, func=self.clear, text=OPERATORS["clear"]["text"], font=(FONT, NORMAL_FONT_SIZE),
+            col=OPERATORS["clear"]["col"], row=OPERATORS["clear"]["row"]
+        )
+        Button(
+            parent=self, func=self.invert, text=OPERATORS["invert"]["text"], font=(FONT, NORMAL_FONT_SIZE),
+            col=OPERATORS["invert"]["col"], row=OPERATORS["invert"]["row"]
+        )
+        Button(
+            parent=self, func=self.percent, text=OPERATORS["percent"]["text"], font=(FONT, NORMAL_FONT_SIZE),
+            col=OPERATORS["percent"]["col"], row=OPERATORS["percent"]["row"]
+        )
+
+        for num, data in NUM_POSITIONS.items():
+            NumButton(
+                parent=self, text=num, font=(FONT, NORMAL_FONT_SIZE),
+                func=self.num_press, col=data["col"],
+                row=data["row"], span=data["span"]
+            )
+
+        for operator, dictionary in MATH_POSITIONS.items():
+            OperatorButton(
+                parent=self, text=operator, font=(FONT, NORMAL_FONT_SIZE),
+                func=self.operator_press, col=dictionary["col"],
+                row=dictionary["row"]
+            )
 
         # run
         self.mainloop()
+
+    def clear(self):
+        pass
+    def percent(self):
+        pass
+    def invert(self):
+        pass
+    def num_press(self, value):
+        print(value)
+    def operator_press(self, operator_type):
+        print(operator_type)
 
     def title_bar_color(self):
         try:
@@ -44,9 +80,10 @@ class Input(ctk.CTkFrame):
     def __init__(self, parent):
         super().__init__(master=parent, fg_color=BLACK)
         global input_variable
-        input_variable = ctk.StringVar(value="")
+        global input_label
+        input_variable = ctk.StringVar(value="23")
         input_label = ctk.CTkLabel(
-            master=self, font=(FONT, NORMAL_FONT_SIZE), text=input_variable.get(), fg_color=BLACK, text_color=WHITE
+            master=self, font=(FONT, OUTPUT_FONT_SIZE), text=input_variable.get(), fg_color=BLACK, text_color=WHITE
         )
         input_label.pack()
         self.grid(row=0, rowspan=1, column=0, columnspan=4, sticky="e")

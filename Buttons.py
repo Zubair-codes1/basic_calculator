@@ -1,21 +1,29 @@
 import customtkinter as ctk
+from main import *
 from settings import *
 
-class Numbers(ctk.CTkFrame):
-    def __init__(self, parent):
-        super().__init__(master=parent, fg_color=WHITE)
-        self.grid(row=4, rowspan=4, column=0, columnspan=3)
-        self.rowconfigure((0, 1, 2, 3), weight=1, uniform="a")
-        self.columnconfigure((0, 1, 2), weight=1, uniform="a")
+class Button(ctk.CTkButton):
+    def __init__(self, parent, text, font, func, col, row, span=1, colour='dark-gray'):
+        super().__init__(
+            master=parent, command=func, text=text, corner_radius=STYLING["corner-radius"], font=font,
+            fg_color=COLORS[colour]["fg"][1], hover_color=COLORS[colour]["hover"][1],
+            text_color=COLORS[colour]["text"][1]
+        )
+        self.grid(column=col, columnspan=span, row=row, sticky="nsew", padx=STYLING["gap"], pady=STYLING["gap"])
 
-        self.make_buttons()
+class NumButton(Button):
+    def __init__(self, parent, text, font, func, col, row, span, colour='light-gray'):
+        super().__init__(
+            parent=parent, text=text, func=lambda: func(text), font=font, col=col,
+            row=row, colour=colour, span=span
+        )
 
-    def make_buttons(self):
-        number = ctk.StringVar(value="1")
-        for i in range(1, 10):
-            button = ctk.CTkButton(
-                self, fg_color=COLORS["light-gray"]["fg"][1], textvariable=number.get(), text_color=BLACK,
-                hover_color=COLORS["light-gray"]["hover"][0]
-            )
-            button.pack()
-
+class OperatorButton(Button):
+    def __init__(self, parent, text, font, func, col, row):
+        super().__init__(
+            parent=parent, text=text, font=font, func=lambda: func(text), col=col, row=row
+        )
+        self.configure(
+            fg_color=COLORS["orange"]["fg"], text_color=COLORS["orange"]["text"][1],
+            hover_color=COLORS["orange"]["hover"]
+        )

@@ -29,7 +29,7 @@ NUM_POSITIONS = {
 
 MATH_POSITIONS = {
     "/": {"col": 3, "row": 2, "character": "", "operator": "/", "image_path": None},
-    "*": {"col": 3, "row": 3, "character": "x", "operator": "*", "image_path": None},
+    "x": {"col": 3, "row": 3, "character": "x", "operator": "*", "image_path": None},
     "-": {"col": 3, "row": 4, "character": "-", "operator": "-", "image_path": None},
     "=": {"col": 3, "row": 6, "character": "=", "operator": "=", "image_path": None},
     "+": {"col": 3, "row": 5, "character": "+", "operator": "+", "image_path": None}
@@ -37,12 +37,12 @@ MATH_POSITIONS = {
 
 OPERATORS = {
     "clear": {"col": 0, "row": 2, "text": "AC", "image_path": None},
-    "invert": {"col": 1, "row": 2, "text": "I", "image_path": None},
+    "invert": {"col": 1, "row": 2, "text": "( - )", "image_path": None},
     "percent": {"col": 2, "row": 2, "text": "%", "image_path": None}
 }
 
 COLORS = {
-    "light-gray": {"fg": ("#505050", "#D4DD4D2"), "hover": ("#686868", "#efefed"), "text": ("white", "black")},
+    "light-gray": {"fg": ("#505050", "#D4D4D2"), "hover": ("#686868", "#efefed"), "text": ("white", "black")},
     "dark-gray": {"fg": ("#D4DD4D2", "#505050"), "hover": ("#efefed", "#686868"), "text": ("black", "white")},
     "orange": {"fg": "#FF9500", "hover": "#FFB143", "text": ("black", "white")},
     "orange-highlight": {"fg": "white", "hover": "white", "text": ("black", "#FF9500")}
