@@ -20,9 +20,12 @@ class App(ctk.CTk):
         self.rowconfigure(list(range(MAIN_ROWS)), weight=1, uniform="a")
         self.columnconfigure(list(range(MAIN_COLUMNS)), weight=1, uniform="a")
 
+        self.input_value = ctk.StringVar(value="")
+        self.output_variable = ctk.StringVar(value="0")
+
         # calling classes
-        Input(self)
-        Output(self)
+        Input(self, self.input_value)
+        Output(self, self.output_variable)
 
         # buttons
         Button(
@@ -55,16 +58,23 @@ class App(ctk.CTk):
         # run
         self.mainloop()
 
+    # button functions
     def clear(self):
-        pass
+        self.input_value.set("")
+        self.output_variable.set("")
     def percent(self):
-        pass
+        self.output_variable.set(float(self.output_variable.get()) / 100)
     def invert(self):
-        pass
+        self.output_variable.set(-float(self.output_variable.get()))
     def num_press(self, value):
-        print(value)
+        self.output_variable.set(value)
     def operator_press(self, operator_type):
-        print(operator_type)
+        if self.output_variable.get() and not operator_type == "=" and self.output_variable.get():
+            self.input_value.set(self.output_variable.get() + " " + operator_type)
+            self.output_variable.set("")
+        elif self.output_variable.get() != 0 and operator_type == "=" and self.output_variable.get():
+            self.input_value.set(self.input_value.get() + " " + self.output_variable.get())
+            self.output_variable.set("")
 
     def title_bar_color(self):
         try:
@@ -76,28 +86,19 @@ class App(ctk.CTk):
             pass
 
 
-class Input(ctk.CTkFrame):
-    def __init__(self, parent):
-        super().__init__(master=parent, fg_color=BLACK)
-        global input_variable
-        global input_label
-        input_variable = ctk.StringVar(value="23")
-        input_label = ctk.CTkLabel(
-            master=self, font=(FONT, OUTPUT_FONT_SIZE), text=input_variable.get(), fg_color=BLACK, text_color=WHITE
+class Input(ctk.CTkLabel):
+    def __init__(self, parent, input_value):
+        super().__init__(
+            master=parent, fg_color=BLACK, textvariable=input_value, font=(FONT, NORMAL_FONT_SIZE)
         )
-        input_label.pack()
         self.grid(row=0, rowspan=1, column=0, columnspan=4, sticky="e")
 
 
-class Output(ctk.CTkFrame):
-    def __init__(self, parent):
-        super().__init__(master=parent)
-        global output_variable
-        output_variable = ctk.StringVar(value="")
-        output_label = ctk.CTkLabel(
-            master=self, font=(FONT, OUTPUT_FONT_SIZE), text=output_variable.get(), fg_color=BLACK, text_color=WHITE
+class Output(ctk.CTkLabel):
+    def __init__(self, parent, output_variable):
+        super().__init__(
+            master=parent, textvariable=output_variable, font=(FONT, OUTPUT_FONT_SIZE)
         )
-        output_label.pack()
         self.grid(row=1, rowspan=1, column=0, columnspan=4, sticky="e")
 
 if __name__ == "__main__":
