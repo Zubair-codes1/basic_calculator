@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from Buttons import Button, NumButton, OperatorButton
+from Buttons import *
 from settings import *
 try:
     from ctypes import windll, byref, sizeof, c_int
@@ -32,16 +32,19 @@ class App(ctk.CTk):
 
         # buttons
         Button(
-            parent=self, func=self.clear, text=OPERATORS["clear"]["text"], font=(FONT, NORMAL_FONT_SIZE),
-            col=OPERATORS["clear"]["col"], row=OPERATORS["clear"]["row"]
+            parent=self, func=self.clear, text=OPERATORS["clear"]["text"],
+            font=(FONT, NORMAL_FONT_SIZE), col=OPERATORS["clear"]["col"],
+            row=OPERATORS["clear"]["row"]
         )
         Button(
-            parent=self, func=self.invert, text=OPERATORS["invert"]["text"], font=(FONT, NORMAL_FONT_SIZE),
-            col=OPERATORS["invert"]["col"], row=OPERATORS["invert"]["row"]
+            parent=self, func=self.invert, text=OPERATORS["invert"]["text"],
+            font=(FONT, NORMAL_FONT_SIZE), col=OPERATORS["invert"]["col"],
+            row=OPERATORS["invert"]["row"]
         )
         Button(
-            parent=self, func=self.percent, text=OPERATORS["percent"]["text"], font=(FONT, NORMAL_FONT_SIZE),
-            col=OPERATORS["percent"]["col"], row=OPERATORS["percent"]["row"]
+            parent=self, func=self.percent, text=OPERATORS["percent"]["text"],
+            font=(FONT, NORMAL_FONT_SIZE), col=OPERATORS["percent"]["col"],
+            row=OPERATORS["percent"]["row"]
         )
 
         for num, data in NUM_POSITIONS.items():
