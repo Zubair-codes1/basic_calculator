@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from Buttons import *
+from Buttons import Button, NumButton, OperatorButton
 from settings import *
 try:
     from ctypes import windll, byref, sizeof, c_int
@@ -20,8 +20,11 @@ class App(ctk.CTk):
         self.rowconfigure(list(range(MAIN_ROWS)), weight=1, uniform="a")
         self.columnconfigure(list(range(MAIN_COLUMNS)), weight=1, uniform="a")
 
+        # variables
         self.input_value = ctk.StringVar(value="")
         self.output_variable = ctk.StringVar(value="0")
+        self.display_nums = []
+        self.full_operation = []
 
         # calling classes
         Input(self, self.input_value)
@@ -60,28 +63,75 @@ class App(ctk.CTk):
 
     # button functions
     def clear(self):
-        self.input_value.set("")
-        self.output_variable.set("")
+        self.display_nums.clear()
+        self.full_operation.clear()
+        self.output_variable.set(self.display_nums)
+        self.input_value.set(self.full_operation)
+
     def percent(self):
-        self.output_variable.set(float(self.output_variable.get()) / 100)
+        if self.display_nums:
+            current_number = float("".join(self.display_nums))
+            percent_number = current_number / 100
+
+            self.display_nums = list(str(percent_number))
+            self.output_variable.set("".join(self.display_nums))
+
     def invert(self):
-        self.output_variable.set(-float(self.output_variable.get()))
+        current_number = "".join(self.display_nums)
+        if current_number:
+            if float(current_number) > 0:
+                self.display_nums.insert(0, "-")
+            else:
+                del self.display_nums[0]
+
+            self.output_variable.set("".join(self.display_nums))
+
     def num_press(self, value):
-        self.output_variable.set(value)
+        self.display_nums.append(str(value))
+        full_number = "".join(self.display_nums)
+        self.output_variable.set(full_number)
+
     def operator_press(self, operator_type):
-        if self.output_variable.get() and not operator_type == "=" and self.output_variable.get():
-            self.input_value.set(self.output_variable.get() + " " + operator_type)
-            self.output_variable.set("")
-        elif self.output_variable.get() != 0 and operator_type == "=" and self.output_variable.get():
-            self.input_value.set(self.input_value.get() + " " + self.output_variable.get())
-            self.output_variable.set("")
+        current_number = "".join(self.display_nums)
+
+        if current_number:
+            self.full_operation.append(current_number)
+
+            if operator_type != "=":
+                # update data
+                self.full_operation.append(operator_type)
+                self.display_nums.clear()
+
+                # update output
+                self.output_variable.set("")
+                self.input_value.set(" ".join(self.full_operation))
+            else:
+                formula = " ".join(self.full_operation)
+                result = eval(formula)
+
+                # format the result
+                if isinstance(result, float):
+                    if result.is_integer():
+                        result = int(result)
+                    else:
+                        result = round(result, 4)
+
+                # update data
+                self.full_operation.clear()
+                self.display_nums = [str(result)]
+
+                # update my output
+                self.output_variable.set(result)
+                self.input_value.set(formula)
 
     def title_bar_color(self):
         try:
             HWND = windll.user32.GetParent(self.winfo_id())
             DWMWA_ATTRIBUTE = 35
             COLOR = TITLE_BAR_HEX_COLOURS["dark"]
-            windll.dwmapi.DwmSetWindowAttribute(HWND, DWMWA_ATTRIBUTE, byref(c_int(COLOR)), sizeof(c_int))
+            windll.dwmapi.DwmSetWindowAttribute(
+                HWND, DWMWA_ATTRIBUTE, byref(c_int(COLOR)), sizeof(c_int)
+            )
         except:
             pass
 
@@ -89,9 +139,10 @@ class App(ctk.CTk):
 class Input(ctk.CTkLabel):
     def __init__(self, parent, input_value):
         super().__init__(
-            master=parent, fg_color=BLACK, textvariable=input_value, font=(FONT, NORMAL_FONT_SIZE)
+            master=parent, fg_color=BLACK, text="",
+            textvariable=input_value, font=(FONT, NORMAL_FONT_SIZE)
         )
-        self.grid(row=0, rowspan=1, column=0, columnspan=4, sticky="e")
+        self.grid(row=0, rowspan=1, column=0, columnspan=4, sticky="se")
 
 
 class Output(ctk.CTkLabel):
@@ -99,7 +150,7 @@ class Output(ctk.CTkLabel):
         super().__init__(
             master=parent, textvariable=output_variable, font=(FONT, OUTPUT_FONT_SIZE)
         )
-        self.grid(row=1, rowspan=1, column=0, columnspan=4, sticky="e")
+        self.grid(row=1, rowspan=1, column=0, columnspan=4, sticky="se")
 
 if __name__ == "__main__":
     App()
